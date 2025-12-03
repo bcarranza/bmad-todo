@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO App - Simple Task Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📝 TODO App</h1>
+            <p class="subtitle">Manage your tasks efficiently</p>
+        </header>
+
+        <!-- Add Task Form -->
+        <section class="add-task-section">
+            <h2>Add New Task</h2>
+            <form id="add-task-form">
+                <div class="form-group">
+                    <label for="task-title">Title <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="task-title" 
+                        name="title" 
+                        placeholder="Enter task title..."
+                        required
+                        maxlength="255"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-description">Description</label>
+                    <textarea 
+                        id="task-description" 
+                        name="description" 
+                        placeholder="Enter task description (optional)..."
+                        rows="3"
+                    ></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-due-date">Due Date</label>
+                    <input 
+                        type="date" 
+                        id="task-due-date" 
+                        name="due_date"
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    ➕ Add Task
+                </button>
+            </form>
+        </section>
+
+        <!-- Filters and Controls -->
+        <section class="controls-section">
+            <div class="filters">
+                <label>Filter:</label>
+                <button class="filter-btn active" data-filter="all">All Tasks</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+            
+            <div class="sort">
+                <label for="sort-order">Sort:</label>
+                <select id="sort-order">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="due_date">By Due Date</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Tasks List -->
+        <section class="tasks-section">
+            <div class="tasks-header">
+                <h2>Your Tasks</h2>
+                <span id="task-count" class="task-count">0 tasks</span>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                Loading tasks...
+            </div>
+            
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            
+            <div id="tasks-list" class="tasks-list">
+                <!-- Tasks will be inserted here dynamically -->
+            </div>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <p>📭 No tasks yet. Create your first task above!</p>
+            </div>
+        </section>
+
+        <!-- Edit Task Modal -->
+        <div id="edit-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Task</h2>
+                    <button class="close-btn" id="close-modal">&times;</button>
+                </div>
+                
+                <form id="edit-task-form">
+                    <input type="hidden" id="edit-task-id">
+                    
+                    <div class="form-group">
+                        <label for="edit-task-title">Title <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="edit-task-title" 
+                            name="title" 
+                            required
+                            maxlength="255"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-description">Description</label>
+                        <textarea 
+                            id="edit-task-description" 
+                            name="description" 
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-due-date">Due Date</label>
+                        <input 
+                            type="date" 
+                            id="edit-task-due-date" 
+                            name="due_date"
+                        >
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
+                        <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Built with ❤️ using FastAPI and vanilla JavaScript</p>
+            <p><a href="/docs" target="_blank">API Documentation</a></p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+
