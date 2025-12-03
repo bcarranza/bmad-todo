@@ -1,18 +1,28 @@
 """Database connection and session management"""
 
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# SQLite database URL - for PostgreSQL, change to: postgresql://user:password@localhost/dbname
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todo.db"
+# Get database URL from environment variable (Railway sets this automatically)
+# Falls back to SQLite for local development
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./todo.db")
 
-# Create engine
-# connect_args={"check_same_thread": False} is needed only for SQLite
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
+# Fix for Railway's PostgreSQL URL format (postgres:// -> postgresql://)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Create engine with appropriate settings
+if DATABASE_URL.startswith("sqlite"):
+    # SQLite needs check_same_thread=False
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    # PostgreSQL doesn't need special connect_args
+    engine = create_engine(DATABASE_URL)
 
 # Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -31,4 +41,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
